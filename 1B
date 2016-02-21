@@ -70,3 +70,99 @@ public class Spreadsheets {
 		System.out.println(outputString);
 	}
 }
+
+//Modified in Collaboration with Zihao Zhu
+import java.util.*;
+
+public class SpreadSheetTwo
+{
+
+	public static void main(String[] args)
+	{
+		// String Conversion memory placeholder
+
+		// Row and Column Placeholder
+
+	
+		// String chart for conversion (recall this is 0 based so dummy@)
+		final String comparisonLine = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		// Prompt
+		System.out.println("What is the conversion?");
+		// Read in data
+		Scanner keyboard = new Scanner(System.in);
+		String value = keyboard.nextLine();
+
+		// Decide if it's case one or case two
+		boolean rStart = false;
+		//If the value string starts in a way that RxxCyy can happen
+		if (value.charAt(0) == 'R' && Character.isDigit(value.charAt(1)))
+			rStart = true;
+		// Stops when you know its in RxxCyy format.
+		boolean rc = false;
+		if (rStart)
+			for (int charIndex = 2; charIndex < value.length()
+					&& !rc; charIndex++)
+			{
+				//If another letter has been found after the first number in a R start it is RxxCyy
+				if (Character.isLetter(value.charAt(charIndex)))
+				{
+					if (rStart)
+						rc = true;
+				}
+			}
+		// Converting (RXXXXCYYYY to A23)
+		if (rc)
+		{
+			int indexOfC = value.indexOf('C');
+			String rowValueString = value.substring(1, indexOfC);
+			int r = Integer.parseInt(rowValueString);
+			//int value of column
+			int c = Integer.parseInt(value.substring(indexOfC+1));
+			//var to take the value of c in order to find the highest base of 26 we can use.
+			int dc=c;
+			StringBuilder cs= new StringBuilder("");
+			//The starting exponent
+			int e=0;
+			//Finds the starting exponent
+			while(dc>26)
+			{
+				dc/=26;
+				e++;
+			}
+			//The current power of 26.
+			int cPow=1;
+			for(int i =0;i<e;i++)
+				cPow*=26;
+			for(int i =e;i>=0;i--)
+			{
+				cs.append(comparisonLine.charAt(c/cPow));
+				c=c%cPow;
+				cPow/=26;
+			}
+			System.out.printf("%s%d",cs.toString(),r);
+		}
+
+		// Base Case (ie A23 to R23C1)
+		else
+		{
+			int numChar =0;
+			while(Character.isLetter(value.charAt(numChar)))
+			{
+				numChar++;
+			}
+			int rVal=Integer.parseInt(value.substring(numChar));
+			int e = numChar-1;
+			int cVal=0;
+			int cPow=1;
+			for(int i =0;i<e;i++)
+				cPow*=26;
+			for(int i =0;i<numChar;i++)
+			{
+				cVal+=cPow*comparisonLine.indexOf(value.charAt(i));
+				cPow/=26;
+			}
+			System.out.printf("R%dC%d",rVal,cVal);
+		}
+
+	}
+}
