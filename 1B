@@ -1,0 +1,72 @@
+import java.util.*;
+
+public class Spreadsheets {
+
+	public static void main(String[] args) {
+		// String Conversion memory placeholder
+		StringBuilder outputString = new StringBuilder("");
+		// Row and Column Placeholder
+		int columnValue = 0;
+		int numberOfChar = 0;
+		int conversionChoice = 0;
+		int columnValueInteger = 0;
+		String rowValue = "";
+		StringBuilder columnStringHolder = new StringBuilder("");
+		// String chart for conversion (recall this is 0 based so dummy@)
+		final String comparisonLine = "@ABCDEFGHIJKLMNOPQRSTUVXYZ";
+		final String numberLine = "123456789";
+		// Prompt
+		System.out.println("What is the conversion?");
+		// Read in data
+		Scanner keyboard = new Scanner(System.in);
+		String value = keyboard.nextLine();
+
+		// Decide if it's case one or case two
+		for (int charIndex = 0; charIndex < value.length(); charIndex++) {
+			if (comparisonLine.indexOf(value.charAt(charIndex)) != -1) {
+				numberOfChar++;
+				if (charIndex == 0 && value.charAt(0) == 'R' && numberLine.indexOf(value.charAt(1)) != -1) {
+					conversionChoice += 1;
+				}
+			}
+		}
+
+		if (value.length() < 2) {
+			System.out.println("");
+		}
+		// Converting (RXXXXCYYYY to A23)
+		else if (numberOfChar == 2 && conversionChoice == 1) {
+			int indexOfC = value.indexOf("C");
+			String rowValueString = value.substring(1, indexOfC);
+			// Need to edit this to alphabet (parse int)
+			columnValueInteger = Integer.valueOf(value.substring(indexOfC + 1));
+			for (int index=)
+
+			outputString.append(columnValueInteger + rowValueString);
+		}
+
+		// Base Case (ie A23 to R23C1)
+		else {
+			int index = 0;
+			// Finds Row Value
+			for (index = 0; comparisonLine.indexOf(value.charAt(index)) != -1; index++) {
+				// Building second substring
+				columnStringHolder.append(value.charAt(index));
+			}
+			// Row Value
+			if (columnStringHolder.length() >= 2) {
+				columnValue = 26 * columnStringHolder.length()
+						+ comparisonLine.indexOf(value.charAt(columnStringHolder.length() - 1));
+			} 
+			else {
+				columnValue = comparisonLine.indexOf(value.charAt(columnStringHolder.length() - 1));
+			}
+			// Column Value
+			rowValue = value.substring(index);
+			outputString.append("R" + rowValue + "C" + columnValue);
+		}
+
+		// Output Statement
+		System.out.println(outputString);
+	}
+}
